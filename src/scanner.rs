@@ -91,6 +91,31 @@ impl Scanner {
                     while self.peek() != '\n' && !self.is_at_end() {
                         self.advance();
                     }
+                } else if self.match_char('*') {
+                    let mut count = 1;
+                    loop {
+                        if self.is_at_end() {
+                            error(self.line as u32, "Unterminated block comment");
+                            break;
+                        }
+                        if self.peek() == '\n' {
+                            self.line += 1;
+                            self.advance();
+                        } else if self.peek() == '*' && self.peek_next() == '/' {
+                            self.advance();
+                            self.advance();
+                            count -= 1;
+                            if count == 0 {
+                                break;
+                            }
+                        } else if self.peek() == '/' && self.peek_next() == '*' {
+                            self.advance();
+                            self.advance();
+                            count += 1;
+                        } else {
+                            self.advance();
+                        }
+                    }
                 } else {
                     self.add_token(TokenType::Slash);
                 }
