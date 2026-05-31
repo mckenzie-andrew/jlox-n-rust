@@ -4,6 +4,7 @@ use std::process;
 use std::io::{self, Write};
 use std::error::Error;
 use std::sync::atomic::{AtomicBool, Ordering};
+use crate::scanner::Scanner;
 
 mod token_type;
 mod token;
@@ -69,17 +70,15 @@ fn run_prompt() -> Result<(), Box<dyn Error>> {
 
 
 fn run(source: &str) {
-    // Scanner scanner = new Scanner(source);
-    // List<Token> tokens = scanner.scanTokens();
+    let mut scanner = Scanner::new(String::from(source));
+    let tokens = scanner.scan_tokens();
 
-    // for (Token token : tokens) {
-    //  System.out.println(token);
-    // }
-    let chars = source.chars();
-    println!("{:?}", chars);
+    for token in tokens {
+        println!("{}", token);
+    }
 }
 
-fn error(line: u32, message: &str) {
+pub fn error(line: u32, message: &str) {
     report(line, "", message);
 }
 

@@ -22,12 +22,12 @@ pub(crate) struct Token {
     kind: TokenType,
     lexeme: String,
     literal: Option<Literal>,
-    line: u32,
+    line: usize,
 }
 
 
 impl Token {
-    fn new(kind: TokenType, lexeme: String, literal: Option<Literal>, line: u32) -> Token {
+    pub fn new(kind: TokenType, lexeme: String, literal: Option<Literal>, line: usize) -> Token {
         Token {
             kind,
             lexeme,
